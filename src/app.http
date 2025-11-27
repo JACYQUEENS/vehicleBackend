@@ -1,0 +1,251 @@
+@baseUrl=http://localhost:4000/api
+
+//GETTING ALL VEHICLE SPECIFICATIONS
+###
+ GET {{baseUrl}}/vehicle-specs
+
+//GETTING VEHICLE SPECIFICATIONS BY ID
+
+###
+ GET {{baseUrl}}/vehicle-specs/18
+
+//CREATING A VEHICLE SPECIFICATION
+ 
+###
+POST {{baseUrl}}/vehicle-specs
+Content-Type: application/json 
+
+{
+            "manufacturer":"toyota",
+           "model":"mazda",
+           "year":"2025",
+            "fuel_type":"diseal",
+            "engine_capacity":"5000",
+            "transmission":"300ccc",
+           "seating_capacity":"4",
+            "color":"red",
+            "features":"2 wheel"
+}
+
+//UPDATING VEHICLE SPECS
+###
+
+PUT {{baseUrl}}/vehicle-specs/22
+Content-Type: application/json
+
+{
+            "manufacturer":"BMW",
+           "model":"hljd",
+           "year":"2022",
+            "fuel_type":"petrol",
+            "engine_capacity":"53000",
+            "transmission":"MANUAL",
+           "seating_capacity":"44",
+            "color":"redfd",
+            "features":"2 fwheel"
+}
+
+//DELETING A VEHICLE SPEC
+
+###
+DELETE {{baseUrl}}/vehicle-specs/22
+
+
+//--------------------------------------------------------
+//VEHICLES ENDPOINTS
+//----------------------------------------------------------
+
+//GETTING ALL VEHICLES
+###
+GET {{baseUrl}}/vehicles
+
+ //GETTING VEHICLES BY ID
+###
+GET {{baseUrl}}/vehicles/1
+
+ //CREATING NEW VEHICLES
+###
+POST {{baseUrl}}/vehicles
+Content-Type: application/json
+
+{        
+    " vehicle_spec_id": 1,                                                                                                                     
+     "rental_rate": "2 days",
+          " availability":"yes",
+          "image_url":"https://robbreport.com/wp-content/uploads/2024/08/temerario01.jpg?w=800"
+}
+ //UPDATING A VEHICLE
+###
+PUT {{baseUrl}}/vehicles/1
+Content-Type: application/json
+{
+     " vehicle_spec_id":"3",
+      "rental_rate": "2 days",
+      " availability":"yes"
+}
+
+ //DELETING A VEHICLE
+###
+DELETE {{baseUrl}}/vehicles/2
+
+
+//------------------------------------------------------------------
+//PAYMENT ENDPOINTS
+//--------------------------------------------------------------------
+
+ //GETTING ALL PAYMENTS
+###
+GET {{baseUrl}}/payments
+
+
+ //GETTING  PAYMENTSBY ID
+###
+ GET {{baseUrl}}/payments/3
+
+
+ 
+ //CREATING NEW  PAYMENTS
+###
+POST {{baseUrl}}/payments
+Content-Type: application/json
+{
+    "booking_id":1,
+    "amount": 1,
+    "payment_method": "cash",
+    "transaction_id": "2"
+}
+
+ //DELETING  PAYMENTS
+###
+ DELETE {{baseUrl}}/payments/7
+
+
+ //-------------------------------------------------------
+ //BOOKINGS ENDPOINTS------------------------------------
+ //------------------------------------------------------
+
+ //GETTING ALL BOOKINGS 
+###
+GET {{baseUrl}}/bookings
+
+ //GETTING BOOKINGS BY ID
+###
+ GET {{baseUrl}}/bookings/1
+
+
+
+
+
+
+ //DELETING BOOKINGS 
+###
+ DELETE {{baseUrl}}/bookings/3
+
+
+
+//---------------------------------
+//USERS ENDPOINTS-------------------
+//-----------------------------------
+ //GETTING ALL USERS
+
+###
+GET {{baseUrl}}/users
+
+ //GETTING USERS BY ID
+###
+GET {{baseUrl}}/users/2
+
+
+
+ //DELETING A USER
+###
+ DELETE {{baseUrl}}/users/3
+
+
+
+
+
+//Incomplete
+
+
+
+
+
+ ////SUPPORT TICKETS ENDPOINTS---------------
+ 
+ //GETTING ALL SUPPORT TICKETS
+###
+GET {{baseUrl}}/tickets
+
+ //GETTING SUPPORT TICKETS BY ID
+###
+ GET {{baseUrl}}/tickets/2
+ //CREATING NEW SUPPORT TICKETS
+
+###
+ POST {{baseUrl}}/tickets
+ //UPDATING SUPPORT TICKETS
+###
+ PUT {{baseUrl}}/tickets/3
+ //DELETING SUPPORT TICKETS
+###
+ DELETE {{baseUrl}}/tickets/3
+
+ //-----------------------------
+ ////PAYMENT ENDPOINTS
+ //-------------------------
+ 
+
+
+ //UPDATING  PAYMENTS
+###
+
+ PUT {{baseUrl}}/payments/4
+
+
+ ////BOOKINGS ENDPOINTS------------------
+ 
+
+ //CREATING NEW BOOKINGS 
+ 
+###
+POST {{baseUrl}}/bookings
+Content-Type: application/json
+{
+             "user_id":1,  
+             "vehicle_id":1, 
+             "booking_date":"28th", 
+             "return_date":"5", 
+             "total_amount":5000
+
+}
+
+ //UPDATING BOOKINGS 
+###
+ PUT {{baseUrl}}/bookings/2
+Content-Type: application/json
+ {
+             "user_id":1,  
+             "vehicle_id":1, 
+             "booking_date":"28th", 
+             "return_date":"5", 
+             "total_amount":5000
+
+}
+
+
+
+ ////USERS ENDPOINTS-------------------------
+ 
+
+
+ //UPDATING A USER
+###
+PUT {{baseUrl}}/users/2
+Content-Type: application/json
+{
+    "first_name":"mercy",
+    "last_name":"joyce",
+    "email":"mercyjoyce@gmail.com",
+    "phone_numer":09987779
+}
