@@ -1,21 +1,28 @@
+// src/features/bookings/bookings.routes.ts
 import { Hono } from "hono";
-import * as BookingController from './booking.controller.ts';
+import * as BookingController from "./booking.controller.ts";
 
-const BookingRoutes = new Hono();
+const bookingRoutes = new Hono();
 
 // CREATE BOOKING
-BookingRoutes.post("/bookings", BookingController.createBooking);
+bookingRoutes.post("/bookings", BookingController.createBooking);
 
-// GET ALL BOOKINGS
-BookingRoutes.get("/bookings", BookingController.getAllBookings);
+// GET ALL BOOKINGS (Admin)
+bookingRoutes.get("/bookings/get", BookingController.getAllBookings);
 
-// GET BOOKING BY ID
-BookingRoutes.get("/bookings/:booking_id", BookingController.getBookingById);
+// GET BOOKINGS BY USER ID
+bookingRoutes.get("/bookings/users/:user_id", BookingController.getBookingsByUserId);
 
-// UPDATE BOOKING
-BookingRoutes.put("/bookings/:booking_id", BookingController.updateBooking);
+// GET SINGLE BOOKING
+bookingRoutes.get("/bookings/:booking_id", BookingController.getBookingById);
 
-// DELETE BOOKING
-BookingRoutes.delete("/bookings/:booking_id", BookingController.deleteBooking);
+// UPDATE & DELETE
+bookingRoutes.put("/bookings/:booking_id", BookingController.updateBooking);
+bookingRoutes.delete("/bookings/:booking_id", BookingController.deleteBooking);
 
-export default BookingRoutes;
+// APPROVE, COMPLETE, CANCEL
+bookingRoutes.put("/bookings/:booking_id/approve", BookingController.approveBooking);
+bookingRoutes.put("/bookings/:booking_id/complete", BookingController.completeBooking);
+bookingRoutes.put("/bookings/:booking_id/cancel", BookingController.cancelBooking);
+
+export default bookingRoutes;

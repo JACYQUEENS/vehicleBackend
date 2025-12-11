@@ -1,21 +1,46 @@
-import { Hono } from "hono";
-import * as VehicleController from './vehicle.controller.ts'
+// import { Hono } from "hono";
+// import * as VehicleController from './vehicle.controller.ts'
 
-const VehicleRoutes = new Hono();
+// const VehicleRoutes = new Hono();
+
+// // CREATE VEHICLE
+// VehicleRoutes.post("/vehicles", VehicleController.createVehicle);
+
+// // GET ALL VEHICLES
+// VehicleRoutes.get("/vehicles", VehicleController.getAllVehicles);
+
+// // GET VEHICLE BY ID
+// VehicleRoutes.get("/vehicles/:vehicle_id", VehicleController.getVehicleById);
+
+// // UPDATE VEHICLE
+// VehicleRoutes.put("/vehicles/:vehicle_id", VehicleController.updateVehicle);
+
+// // DELETE VEHICLE
+// VehicleRoutes.delete("/vehicles/:vehicle_id", VehicleController.deleteVehicle);
+
+// export default VehicleRoutes;
+
+
+// src/Vehicles/vehicle.routes.ts
+import { Hono } from "hono";
+import * as VehicleController from './vehicle.controller.ts';
+
+const vehicleRoutes = new Hono();
 
 // CREATE VEHICLE
-VehicleRoutes.post("/vehicles", VehicleController.createVehicle);
+vehicleRoutes.post("/vehicles", VehicleController.createVehicle);
 
 // GET ALL VEHICLES
-VehicleRoutes.get("/vehicles", VehicleController.getAllVehicles);
+vehicleRoutes.get("/vehicles", VehicleController.getAllVehicles);
 
 // GET VEHICLE BY ID
-VehicleRoutes.get("/vehicles/:vehicle_id", VehicleController.getVehicleById);
+vehicleRoutes.get("/vehicles/:vehicle_id", VehicleController.getVehicleById);
 
 // UPDATE VEHICLE
-VehicleRoutes.put("/vehicles/:vehicle_id", VehicleController.updateVehicle);
+vehicleRoutes.put("/vehicles/:vehicle_id", VehicleController.updateVehicle);
 
 // DELETE VEHICLE
-VehicleRoutes.delete("/vehicles/:vehicle_id", VehicleController.deleteVehicle);
+vehicleRoutes.delete("/vehicles/:vehicle_id", VehicleController.deleteVehicle);
 
-export default VehicleRoutes;
+// ✅ Default export for easy import in index.ts
+export default vehicleRoutes;

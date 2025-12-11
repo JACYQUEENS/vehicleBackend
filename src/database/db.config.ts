@@ -5,7 +5,7 @@ dotenv.config(); // Loads the environment variables from .env file
 
 
 
-const { SQL_USER, SQL_PASSWORD, SQL_SERVER, SQL_PORT, SQL_DATABASE } = process.env; // Destructure environment variables
+const { SQL_USER, SQL_PASSWORD, SQL_SERVER, SQL_PORT, SQL_DATABASE, PAYSTACK_SECRET_KEY } = process.env; // Destructure environment variables
 
 //Ensure that the environment variables are defined
 assert(SQL_USER, 'SQL_USER is not defined in environment variables');
@@ -13,6 +13,7 @@ assert(SQL_PASSWORD, 'SQL_PASSWORD is not defined in environment variables');
 assert(SQL_SERVER, 'SQL_SERVER is not defined in environment variables');
 assert(SQL_PORT, 'SQL_PORT is not defined in environment variables');
 assert(SQL_DATABASE, 'SQL_DATABASE is not defined in environment variables');
+assert(PAYSTACK_SECRET_KEY, 'PAYSTACK_SECRET_KEY is not defined in environment variables'); // ✅ Added
 
 
 //MSSQL Database Configuration
@@ -40,6 +41,9 @@ export const Config = {
         }
     }
 };
+
+//export paystack secretkey
+export const PAYSTACK_KEY = PAYSTACK_SECRET_KEY;
 
 
 //Create a connection pool - a cache of database connections maintained so that the connections can be reused when future requests to the database are required.

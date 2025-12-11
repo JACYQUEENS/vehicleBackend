@@ -9,12 +9,15 @@ import VehicleRoutes from './Vehicles/vehicle.routes.ts';
 import UserRoutes from './Users/users.routes.ts';
 import SupportTicketRoutes from './SupportTickets/SupportTickets.routes.ts';
 import PaymentRoutes from './Payments/payments.routes.ts';
-import BookingRoutes from './Bookings/booking.routes.ts';
+// import BookingRoutes from './Bookings/booking.routes.ts';
 import authRoutes from './Auth/auth.routes.ts';
+import DashboardRoutes from './dashboarddata/dashboarddata.routes.ts'
+import bookingRoutes from './Bookings/booking.routes.ts';
+import profileRoutes from './profile/profie.routes.ts';
 
 const app = new Hono();
 app.use('*',cors());
-
+//app.use(logger);
 //prometheus middleware
 const {printMetrics, registerMetrics} =  prometheus()
 
@@ -51,8 +54,11 @@ app.route("api", VehicleRoutes);
 app.route("api", UserRoutes);
 app.route("api", SupportTicketRoutes);
 app.route("api", PaymentRoutes);
-app.route("api", BookingRoutes);
+// app.route("api", BookingRoutes);
+app.route("api", bookingRoutes);
 app.route("api",authRoutes);
+app.route("api",DashboardRoutes);
+app.route("api",profileRoutes);
 
 const port = Number(process.env.PORT) || 4000;
 

@@ -1,13 +1,15 @@
 import { getDbPool } from '../database/db.config.ts'
 
 interface UserResponse {
+    address: any;
+    phone_number: any;
     user_id: number;
     first_name: string;
     last_name: string;
     email: string;
     contact_phone: string;
     password: string;
-    user_type?: string;
+    role?: string;
     
 }
 
@@ -70,20 +72,62 @@ export const createUserService = async (
 };
 
 
-//update user by user_id
-export const updateUserService = async (user_id:number, first_name:string,last_name:string,email:string,contact_phone:string, password:string): Promise<UserResponse | null> => {
-        const  db = getDbPool();
-        const query = 'UPDATE Users SET first_name = @first_name, last_name = @last_name, contact_phone = @contact_phone, email = @email, password = @password  OUTPUT INSERTED.* WHERE user_id = @user_id';
-        const result = await db.request()
-            .input('user_id', user_id)
-            .input('first_name', first_name)
-            .input('last_name', last_name)
-            .input('contact_phone', contact_phone)
-            .input('email', email)
-            .input('password', password)
-            .query(query);
-        return result.recordset[0] || null;
-}
+///update user by user_id
+export const updateUserService = async (
+  user_id: number,
+  first_name: string,
+  last_name: string,
+  email: string,
+  contact_phone: string,
+  password?: string,
+  address?: string,
+  role?: string
+): Promise<UserResponse | null> => {
+  const db = getDbPool();
+
+  try {
+    let query = `
+      UPDATE Users 
+      SET 
+        first_name = @first_name, 
+        last_name = @last_name, 
+        contact_phone = @contact_phone, 
+        email = @email
+    `;
+
+    const request = db.request()
+      .input('user_id', user_id)
+      .input('first_name', first_name)
+      .input('last_name', last_name)
+      .input('contact_phone', contact_phone)
+      .input('email', email);
+
+    // ✅ Optional fields
+    if (address) {
+      query += `, address = @address`;
+      request.input('address', address);
+    }
+
+    if (role) {
+      query += `, role = @role`;
+      request.input('role', role);
+    }
+
+    if (password && password.trim() !== "") {
+      query += `, password = @password`;
+      request.input('password', password);
+    }
+
+    query += ` OUTPUT INSERTED.* WHERE user_id = @user_id`;
+
+    const result = await request.query(query);
+    return result.recordset[0] || null;
+
+  } catch (error) {
+    console.error("Update service error:", error);
+    throw error;
+  }
+};
 
 //delete user by user_id
 export const deleteUserService = async (user_id:number): Promise<string> => {

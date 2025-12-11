@@ -1,119 +1,141 @@
-import { type Context } from "hono";
+// src/features/bookings/bookings.controller.ts
+import type { Context } from "hono";
 import * as BookingService from "./bookings.service.ts";
 
-
-// GET ALL BOOKINGS
-
-export const getAllBookings = async (c: Context) => {
-    try {
-        const data = await BookingService.getAllBookings();
-
-        if (data.length === 0)
-            return c.json({ message: "No bookings found" }, 404);
-
-        return c.json(data);
-
-    } catch (error: any) {
-        console.log("Error fetching bookings:", error.message);
-        return c.json({ error: "Failed to fetch bookings" }, 500);
-    }
+export const createBooking = async (c: Context) => {
+  try {
+    const body = await c.req.json();
+    const created = await BookingService.createBookingService({
+      user_id: Number(body.user_id),
+      vehicle_id: Number(body.vehicle_id),
+      booking_date: body.booking_date,
+      return_date: body.return_date,
+      total_amount: Number(body.total_amount),
+      booking_status: body.booking_status ?? "pending",
+    });
+    return c.json({ message: "Booking created successfully", booking: created }, 201);
+  } catch (err: any) {
+    return c.json({ error: err.message || "Failed to create booking" }, 500);
+  }
 };
 
+// export const getAllBookings = async (c: Context) => {
+//   try {
+//     const bookings = await BookingService.getAllBookingsService();
+//     return c.json(bookings, 200);
+//   } catch (err) {
+//     return c.json({ error: "Failed to fetch bookings" }, 500);
+//   }
+// };
 
-// GET BOOKING BY ID
+
+// ===========================
+// GET ALL BOOKINGS - SIMPLE VERSION
+// ===========================
+export const getAllBookings = async (c: Context) => {
+  try {
+    console.log("📞 [CONTROLLER] GET /bookings called (simple version)");
+    
+    // Call the simple service
+    const bookings = await BookingService.getAllBookingsService();
+    
+    console.log(`✅ [CONTROLLER] Returning ${bookings.length} bookings`);
+    
+    // Return the array directly
+    return c.json(bookings, 200);
+    
+  } catch (err: any) {
+    console.error("❌ [CONTROLLER] Error in getAllBookings:", {
+      message: err.message,
+      name: err.name
+    });
+    
+    return c.json({ 
+      success: false,
+      error: "Failed to fetch bookings",
+      details: err.message
+    }, 500);
+  }
+};
+
+export const getBookingsByUserId = async (c: Context) => {
+  try {
+    const user_id = Number(c.req.param("user_id"));
+    const bookings = await BookingService.getBookingsByUserIdService(user_id);
+    return c.json(bookings, 200);
+  } catch (err) {
+    return c.json({ error: "Failed to fetch user bookings" }, 500);
+  }
+};
 
 export const getBookingById = async (c: Context) => {
-    const booking_id = parseInt(c.req.param("booking_id"));
-
-    try {
-        const result = await BookingService.getBookingById(booking_id);
-
-        if (result === null)
-            return c.json({ error: "Booking not found" }, 404);
-
-        return c.json(result);
-
-    } catch (error) {
-        console.log("Error fetching booking:", error);
-        return c.json({ error: "internal server error" }, 500);
-    }
+  try {
+    const booking_id = Number(c.req.param("booking_id"));
+    const booking = await BookingService.getBookingByIdService(booking_id);
+    if (!booking) return c.json({ error: "Booking not found" }, 404);
+    return c.json({ booking }, 200);
+  } catch (err) {
+    return c.json({ error: "Failed to fetch booking" }, 500);
+  }
 };
 
-
-// CREATE BOOKING
-export const createBooking = async (c: Context) => {
-    try {
-        const body = await c.req.json() as {
-            user_id:number,
-             vehicle_id:number, 
-             booking_date:string, 
-             return_date:string, 
-             total_amount:number
-        };
-
-        const message = await BookingService.createBooking(
-           body. user_id,
-            body.vehicle_id,
-           body. booking_date,
-            body.return_date,
-            body.total_amount
-        );
-        if(message==='failed to create bookings'){
-            return c.json({error:'successfullycreated'},201)
-        }
-
-    } catch (error) {
-        console.log("Error creating booking:", error);
-        return c.json({ error: "internal server error" }, 500);
-    }
-};
-
-
-// UPDATE BOOKING
 export const updateBooking = async (c: Context) => {
-    try {
-        const booking_id = parseInt(c.req.param("booking_id"));
-        const body = await c.req.json();
-
-        const exists = await BookingService.getBookingById(booking_id);
-        if (exists === null)
-            return c.json({ error: "Booking not found" }, 404);
-
-        const updated = await BookingService.updateBooking(
-            booking_id,
-            body.user_id,
-            body.vehicle_id,
-            body.booking_date,
-            body.return_date,
-            body.total_amount,
-            body.booking_status
-        );
-
-        return c.json({ message: "Booking updated successfully", updated_booking: updated });
-
-    } catch (error) {
-        console.log("Error updating booking:", error);
-        return c.json({ error: "internal server error" }, 500);
-    }
+  try {
+    const booking_id = Number(c.req.param("booking_id"));
+    const body = await c.req.json();
+    const updated = await BookingService.updateBookingService(booking_id, {
+      user_id: Number(body.user_id),
+      vehicle_id: Number(body.vehicle_id),
+      booking_date: body.booking_date,
+      return_date: body.return_date,
+      total_amount: Number(body.total_amount),
+      booking_status: body.booking_status,
+    });
+    return c.json({ message: "Booking updated", booking: updated }, 200);
+  } catch (err) {
+    return c.json({ error: "Failed to update booking" }, 500);
+  }
 };
 
-
-// DELETE BOOKING
 export const deleteBooking = async (c: Context) => {
-    const booking_id = parseInt(c.req.param("booking_id"));
+  try {
+    const booking_id = Number(c.req.param("booking_id"));
+    const ok = await BookingService.deleteBookingService(booking_id);
+    if (!ok) return c.json({ error: "Booking not found or could not be deleted" }, 404);
+    return c.json({ message: "Booking deleted" }, 200);
+  } catch (err) {
+    return c.json({ error: "Failed to delete booking" }, 500);
+  }
+};
 
-    try {
-        const exists = await BookingService.getBookingById(booking_id);
+export const approveBooking = async (c: Context) => {
+  try {
+    const booking_id = Number(c.req.param("booking_id"));
+    const updated = await BookingService.approveBookingService(booking_id);
+    return c.json({ message: "Booking approved", booking: updated }, 200);
+  } catch (err) {
+    return c.json({ error: "Failed to approve booking" }, 500);
+  }
+};
 
-        if (exists === null)
-            return c.json({ error: "Booking not found" }, 404);
+export const completeBooking = async (c: Context) => {
+  try {
+    const booking_id = Number(c.req.param("booking_id"));
+    const body = await c.req.json();
+    const vehicle_id = Number(body.vehicle_id);
+    const updated = await BookingService.completeBookingService(booking_id, vehicle_id);
+    return c.json({ message: "Booking completed", booking: updated }, 200);
+  } catch (err) {
+    return c.json({ error: "Failed to complete booking" }, 500);
+  }
+};
 
-        const message = await BookingService.deleteBooking(booking_id);
-
-        return c.json({ message });
-
-    } catch (error) {
-        console.log("Error deleting booking:", error);
-        return c.json({ error: "internal server error" }, 500);
-    }
+export const cancelBooking = async (c: Context) => {
+  try {
+    const booking_id = Number(c.req.param("booking_id"));
+    const updated = await BookingService.cancelBookingService(booking_id);
+    return c.json({ message: "Booking cancelled", booking: updated }, 200);
+  } catch (err) {
+    return c.json({ error: "Failed to cancel booking" }, 500);
+  }
 };

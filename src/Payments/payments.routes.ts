@@ -1,20 +1,78 @@
+
+// import { Hono } from "hono";
+// import {
+//   createPayment,
+//   getPaymentById,
+//   getAllPayments,
+//   getPaymentsByUserId,
+//   updatePayment,
+//   deletePayment,
+//   verifyPayment
+// } from "./payment.controller.ts";
+
+// const paymentRoute = new Hono();
+
+// // CREATE
+// paymentRoute.post("/payments", createPayment);
+
+// // GET ALL
+// paymentRoute.get("/payments", getAllPayments);
+
+// // GET BY USER ID
+// paymentRoute.get("/user/:user_id", getPaymentsByUserId);
+
+// // GET BY PAYMENT ID
+// paymentRoute.get("/:payment_id", getPaymentById);
+
+// // UPDATE
+// paymentRoute.put("/:payment_id", updatePayment);
+
+// // DELETE
+// paymentRoute.delete("/:payment_id", deletePayment);
+
+// // VERIFY PAYMENT
+// paymentRoute.post("/payments/verify", verifyPayment);
+
+// export default paymentRoute;
+
+
+
 import { Hono } from "hono";
-import * as PaymentController from './payment.controller.ts'
+import {
+  createPayment,
+  getPaymentById,
+  getAllPayments,
+  getPaymentsByUserId,
+  updatePayment,
+  deletePayment,
+  verifyPayment,
+  downloadReceipt
+} from "./payment.controller.ts";
 
-const PaymentRoutes = new Hono();
-//GETTING ALL PAYMENTS
-PaymentRoutes.get("/payments", PaymentController.getAllPayments);
+const paymentRoute = new Hono();
 
-//GETTING PAYMENTS BY ID
-PaymentRoutes.get("/payments/:payment_id", PaymentController.getPaymentById);
+// CREATE
+paymentRoute.post("/payments", createPayment);
 
-//CREATING PAYMENT
-PaymentRoutes.post("/payments", PaymentController.createPayment);
+// GET ALL
+paymentRoute.get("/payments", getAllPayments);
 
-//UPDATING PAYMENTS
-PaymentRoutes.put("/payments/:payment_id", PaymentController.updatePayment);
+// GET BY USER ID
+paymentRoute.get("/user/:user_id", getPaymentsByUserId);
 
-//DELETING PAYMENTS
-PaymentRoutes.delete("/payments/:payment_id", PaymentController.deletePayment);
+// DOWNLOAD RECEIPT
+paymentRoute.get("/receipt/:booking_id", downloadReceipt);
 
-export default PaymentRoutes;
+// GET BY PAYMENT ID
+paymentRoute.get("/:payment_id", getPaymentById);
+
+// UPDATE
+paymentRoute.put("/payments:payment_id", updatePayment);
+
+// DELETE
+paymentRoute.delete("/:payment_id", deletePayment);
+
+// VERIFY PAYMENT
+paymentRoute.post("/payments/verify", verifyPayment);
+
+export default paymentRoute;

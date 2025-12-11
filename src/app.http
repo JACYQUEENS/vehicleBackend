@@ -69,10 +69,9 @@ POST {{baseUrl}}/vehicles
 Content-Type: application/json
 
 {        
-    " vehicle_spec_id": 1,                                                                                                                     
-     "rental_rate": "2 days",
-          " availability":"yes",
-          "image_url":"https://robbreport.com/wp-content/uploads/2024/08/temerario01.jpg?w=800"
+    " vehicleSpec_id": "3",                                                                                                                     
+     "rental_rate": "3500",
+     "image_url":"https://robbreport.com/wp-content/uploads/2024/08/temerario01.jpg?w=800"
 }
  //UPDATING A VEHICLE
 ###
@@ -126,7 +125,7 @@ Content-Type: application/json
 
  //GETTING ALL BOOKINGS 
 ###
-GET {{baseUrl}}/bookings
+GET {{baseUrl}}/bookings/get
 
  //GETTING BOOKINGS BY ID
 ###

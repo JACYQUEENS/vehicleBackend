@@ -35,7 +35,6 @@ export const getUserById = async (c: Context) => {
     return c.json({ error: "Internal server error" }, 500);
   }
 };
-
 // UPDATE USER
 export const updateUser = async (c: Context) => {
   const user_id = Number(c.req.param("user_id"));
@@ -53,20 +52,26 @@ export const updateUser = async (c: Context) => {
       body.first_name ?? existing.first_name,
       body.last_name ?? existing.last_name,
       body.email ?? existing.email,
-      body.phone_number ?? existing.phone_number,
-      body.password ?? existing.password,
+      body.contact_phone ?? existing.contact_phone,  // ✅ fixed
+      body.password,                                // ✅ optional
+      body.address ?? existing.address,
+      body.role ?? existing.role
     );
 
     return c.json({
-      message: "User updated successfully",
+      message: "User updated successfully ✅",
       updated_user: updated,
     });
-
-  } catch (error) {
-    console.error("Error updating user:", error);
-    return c.json({ error: "Internal server error" }, 500);
-  }
+} catch (error: any) {
+  console.log("FULL ERROR =>", error);
+  return c.json({ 
+    error: "Internal server error",
+    details: error.message 
+  }, 500);
+}
 };
+
+
 
 // DELETE USER
 export const deleteUser = async (c: Context) => {
